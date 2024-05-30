@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Unsplash Image</title>
+</head>
+
+<body>
+    <div>
+        <h1>Random Unsplash Image</h1>
+        <img id="image" src="" alt="Random Image">
+        <p>Photographer: <span id="photographer"></span></p>
+        <button id="likeButton">Like</button>
+        <p>Likes: <span id="likeCount">0</span></p>
+    </div>
+
+    <script>
+        const accessKey = 'e0V0R1ZH3rdy8iZHFowBiHW74KEoMxIq-kQMGtQDROY';
+        const apiUrl = `https://api.unsplash.com/photos/random?client_id=${accessKey}`;
+
+        const imageElement = document.getElementById('image');
+        const photographerElement = document.getElementById('photographer');
+        const likeButton = document.getElementById('likeButton');
+        const likeCountElement = document.getElementById('likeCount');
+
+        let likeCount = localStorage.getItem('likeCount') || 0;
+        likeCountElement.textContent = likeCount;
+
+        likeButton.addEventListener('click', () => {
+            likeCount++;
+            likeCountElement.textContent = likeCount;
+            localStorage.setItem('likeCount', likeCount);
+        });
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                imageElement.src = data.urls.regular;
+                photographerElement.textContent = data.user.name;
+            })
+            .catch(error => console.error('Error fetching image:', error));
+    </script>
+</body>
+
+</html>
